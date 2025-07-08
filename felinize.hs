@@ -1,21 +1,23 @@
 #!/usr/bin/env runhaskell
 
-import Data.Char (chr, ord, isAlpha, isPunctuation, isSpace)
-import Data.List (dropWhile, dropWhileEnd, intercalate, isPrefixOf)
+import Data.Char (chr, ord, isSpace)
+import Data.List (dropWhile, dropWhileEnd, intercalate, isInfixOf)
 import Data.List.Split (splitOn)
 import System.Environment (getArgs)
 
-main =
+main = do
+  args <- getArgs
   interact
     $ unlines
     . fmap (\line -> felinize [] False [] 0 $ line !! 0)
-    . filter (numberLocation $ isPrefixOf "北京市")
+    . filter (numberLocation $ locationInArgs args)
     . filter (numberType $ (==) "MOBILE")
     . fmap (fmap trim . splitOn ";")
     . lines
  where
   numberLocation cond line = cond $ last line
   numberType     cond line = cond $ line !! 2
+  locationInArgs args city = any (\arg -> arg `isInfixOf` city) args
 
 -- | Remove leading and trailing whitespace and quotes
 --
