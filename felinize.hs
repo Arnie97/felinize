@@ -17,7 +17,7 @@ main = do
  where
   numberLocation cond line = cond $ last line
   numberType     cond line = cond $ line !! 2
-  locationInArgs args city = any (\arg -> arg `isInfixOf` city) args
+  locationInArgs args city = any (flip isInfixOf city) args
 
 -- | Remove leading and trailing whitespace and quotes
 --
